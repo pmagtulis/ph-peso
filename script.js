@@ -1,11 +1,13 @@
 ; (function () {
-    const margin = { top: 20, right: 50, bottom: 50, left: 50 }
+    const margin = { top: 20, right: 30, bottom: 20, left: 30 }
 
     const width = 900 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+        height = 450 - margin.top - margin.bottom;
 
-    let cpiLine; // create a variable in the outermost scope where we can store the lines we draw
+    let pesoLine; // create a variable in the outermost scope where we can store the lines we draw
     let label;
+    var dataMin= 48;
+    var dataMax= 60;
 
 
     const svg = d3
@@ -19,18 +21,17 @@
 
     // const colorScale = d3.scaleOrdinal().range(d3.schemeDark2)
     const xPositionScale = d3.scaleTime().range([0, width])
-    const yPositionScale = d3.scaleLinear().range([height, 0])
-    const parseDate = d3.timeParse("%Y")
-    var formatPercent = d3.format(".0%");
+    const yPositionScale = d3.scaleLinear().range([0, height])
+    const parseDate = d3.timeParse("%Y-%m-%d")
 
 
 
     const line = d3
         .line()
-        .x(d => xPositionScale(d.year))
-        .y(d => yPositionScale(d.annualpctChange))
+        .x(d => xPositionScale(d.date))
+        .y(d => yPositionScale(d.close))
 
-    d3.csv("data/cpi.csv")
+    d3.csv("data/closing.csv")
         .then(ready)
         .catch(function (error) {
             console.log("Failed with", error)
@@ -39,45 +40,81 @@
     function ready(datapoints) {
         console.log("ready")
         datapoints.forEach(function (d) {
-            d.year = parseDate(d.year)
-            d["annualpctChange"] = +d["annualpctChange"]
+            d.date = parseDate(d.date)
+            d.close = +d.close;
         })
 
         // Update the scales
-        const extentCPI = d3.extent(datapoints, d => d.annualpctChange)
-        yPositionScale.domain(extentCPI).nice()
-        xPositionScale.domain(d3.extent(datapoints, d => d.year))
+        yPositionScale.domain([dataMin, dataMax]).nice()
+        xPositionScale.domain(d3.extent(datapoints, d => d.date))
 
 
-        cpiLine = svg.append("path")
+        pesoLine = svg.append("path")
             .datum(datapoints)
-            .attr("stroke", "black")
+            .attr('stroke', '#d72514')
+            .attr('stroke-width', 3)
             .attr("fill", "none")
             .attr("d", line)
-            .style('stroke-dasharray', 2000) // hiding the lines sneakily
-            .style('stroke-dashoffset', 2000);
-        // .style("stroke", d3.color("red") );
+            .style('stroke-dasharray', 7000) // hiding the lines sneakily
+            .style('stroke-dashoffset', 7000);
 
 
 
-        const yAxis = d3.axisLeft(yPositionScale).tickFormat(formatPercent);
+        const yAxis = d3.axisLeft(yPositionScale)
+            .tickSize(0, 0) // size of ticks
+            .tickPadding([5])
+            .ticks(6)
         svg.append("g")
             .attr("class", "axis y-axis")
+            .style('stroke-width', 2) // increase stroke width of axis
+            .style('font-size', '14px')
+            .style('font-family', 'Roboto')
             .call(yAxis)
+        
+        svg.append("g")
+            .attr("class", "y-gridlines")
+            .call(d3.axisLeft(yPositionScale)
+                .tickSize(-width) // Set the size of the gridlines (-width to cover the entire width of the chart)
+                .tickFormat("")
+            );
+
+            d3.select(".y-gridlines")
+            .selectAll(".tick line")
+            .style("stroke", "#ccccc") // Color of the gridlines
+
+            d3.select(".y-axis")
+            .selectAll(".domain")
+            .remove();
 
 
 
         const xAxis = d3.axisBottom(xPositionScale)
+            .tickSize(5, 0) // size of ticks
+            .tickPadding([5]);
         svg.append("g")
             .attr("class", "axis x-axis")
             .attr("transform", "translate(0," + height + ")")
+            .style('stroke-width', 2) // increase stroke width of axis
+            .style('font-size', '14px')
+            .style('font-family', 'Roboto')
             .call(xAxis)
 
+            d3.select(".x-axis")
+            .selectAll(".domain")
+            .remove();
+
         label = svg.append('text') // assigning my label to the variable up top
-            .text("The first peak of the Great Inflation")
-            .attr('x', xPositionScale(parseDate(1970)))
-            .attr('y', yPositionScale(0.058))
+            .text("P58.13:$1")
+            .attr('x', xPositionScale(parseDate("2024-5-24")))
+            .attr('y', yPositionScale(59.13))
             .attr('class', 'label hidden');
+
+        // dot = svg.append('circle') // assigning my label to the variable up top
+        //     .attr('cx', xPositionScale(parseDate("2024-5-24")))
+        //     .attr('cy', yPositionScale("58.13"))
+        //     .attr("r", 3)
+        //     .style("fill", "#d72514")
+        //     .attr('class', 'label hidden');
 
         // do stuff to the chart here
         // depending on what step you are at
@@ -90,27 +127,35 @@
                 if (direction === 'forward') {
                     d3.select("path")
                         .transition()
-                        .duration(12000)
+                        .duration(7000)
                         .style('stroke-dashoffset', 0);
 
                 } else {
-                    cpiLine
+                    pesoLine
                         .style('opacity', 0).style('stroke-width', 1)
                         .transition()
                         .duration(7000)
-                        .style('stroke-dashoffset', 4000);
+                        .style('stroke-dashoffset', 0);
                 }
 
             }
 
 
-            if (step_index === 1) {
+
+            // if(step_index === 4){
+            //     if(direction==='forward'){
+            //         // lines.style('opacity', 1).style('stroke-width', 1);
+            //         dot.classed('hidden', false);
+            //     } else{
+            //         dot.classed('hidden', true);
+            //     }
+            // }
+
+            if (step_index === 4) {
                 if (direction === 'forward') {
-                    // lines.style('opacity', 0.2).style('stroke-dashoffset', 0);
-                    d3.select('#line-0').raise().style('stroke-width', '2px').style('opacity', 1);
-                } else { //this tells the chart to hide the label if you scroll in the opposite direction.
-                    // lines.style('opacity', 0.2);
-                    d3.select('#line-0').raise().style('stroke-width', '2px').style('opacity', 1);
+                    // lines.style('opacity', 1).style('stroke-width', 1);
+                    label.classed('hidden', false);
+                } else {
                     label.classed('hidden', true);
                 }
             }

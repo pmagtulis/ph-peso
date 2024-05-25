@@ -20,8 +20,12 @@ a {
   position: relative;
   margin-bottom: auto;
   color: #333333;
-  font-size: 40px;
+  font-size: 28px;
   font-weight: bold;
+}
+
+.peso {
+  border-bottom: 3px solid #d72514;
 }
 
 .byline {
@@ -51,7 +55,6 @@ em {
 .body-text{
   max-width: 600px;
   margin: 0 auto;
-  margin-top: 25px;
 }
 
 #chart {
@@ -68,7 +71,7 @@ em {
 }
 
 .scrolly {    
-  margin-top: 25px;
+  margin-top: 5px;
 }
 
 #text-container {
@@ -79,7 +82,7 @@ em {
 }
 
 .step {
-  min-height: 90vh;
+  min-height: 70vh;
   width: 100%;
   margin: 0 auto;
 }
@@ -87,8 +90,7 @@ em {
 .step > .text-box {
   max-width: 600px;
   margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 3px 6px rgb(0 0 0 / 16%);
+  background-color: rgba(255, 255, 255, 1);
   padding: 15px;
   font-size: 14px;
 }
@@ -101,10 +103,6 @@ div.sticky {
   width: 100%;
 
 }
-div.text-box{
-  box-shadow: 10px 10px lightblue;
-}
-
 
 /* When it's less than 700 pixels wide, do normal scrollytelling */
 
