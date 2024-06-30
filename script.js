@@ -1,8 +1,8 @@
 ; (function () {
     const margin = { top: 20, right: 30, bottom: 20, left: 30 }
 
-    const width = 900 - margin.left - margin.right,
-        height = 450 - margin.top - margin.bottom;
+    const width = 1000 - margin.left - margin.right,
+        height = 480 - margin.top - margin.bottom;
 
     let pesoLine; // create a variable in the outermost scope where we can store the lines we draw
     let label;
@@ -103,12 +103,6 @@
             .selectAll(".domain")
             .remove();
 
-        label = svg.append('text') // assigning my label to the variable up top
-            .text("P58.13:$1")
-            .attr('x', xPositionScale(parseDate("2024-5-24")))
-            .attr('y', yPositionScale(59.13))
-            .attr('class', 'label hidden');
-
         // dot = svg.append('circle') // assigning my label to the variable up top
         //     .attr('cx', xPositionScale(parseDate("2024-5-24")))
         //     .attr('cy', yPositionScale("58.13"))
@@ -127,15 +121,15 @@
                 if (direction === 'forward') {
                     d3.select("path")
                         .transition()
-                        .duration(7000)
-                        .style('stroke-dashoffset', 0);
+                        .duration(9000)
+                        .style('stroke-dashoffset', 1);
 
                 } else {
                     pesoLine
                         .style('opacity', 0).style('stroke-width', 1)
                         .transition()
-                        .duration(7000)
-                        .style('stroke-dashoffset', 0);
+                        .duration(9000)
+                        .style('stroke-dashoffset', 1);
                 }
 
             }
