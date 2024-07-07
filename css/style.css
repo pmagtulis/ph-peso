@@ -1,16 +1,47 @@
-html,
-body {
-  font: 'Roboto';
-  text-rendering: optimizeLegibility;
-}
-.wraper{
-  overflow-x: hidden;
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
 }
 
-.massiveImage {
+.container {
+  width: 400%; /* 100% * number of panels */
   height: 100vh;
-  width: 400vw;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.panel {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* .panel:nth-child(1) {
+background-position: center;
+background-size: 100%;
+width: 100%;
+height:100%;} */
+
+#g-sensitivity-box {
+  width: 100vw;
+  height: 100vh;
+  /* object-fit: cover; */
   background-size: cover;
   background-position: center;
-  background-image: url('http://pmagtulis.github.io/ph-peso/assets/sensitivity.png') top left no-repeat;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
+
+
+.panel:nth-child(2) { background-color: #e74c3c; }
+.panel:nth-child(3) { background-color: #3498db; }
+.panel:nth-child(4) { background-color: #2ecc71; }
+
+
